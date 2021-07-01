@@ -1,0 +1,60 @@
+server:
+  port: 8090
+  hostname: localhost
+#  hostname: 192.168.0.106
+    
+spring:
+  application:
+    name: customer-service
+  data:
+    mongodb:
+      uri: mongodb://${server.hostname}:27017/customer
+#      uri: mongodb://mongo:27017/customer
+  kafka:
+    bootstrap-servers: ${server.hostname}:29092
+
+kafka:
+  server:
+    hostname: ${server.hostname}
+    port: 29092
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    hostname: ${server.hostname}
+
+msg:
+  error:
+    registro:
+      notfound: CLIENTE NO IDENTIFICADO
+      notfound.create: CLIENTE NO SE PUDO CREAR
+      if.exists: CLIENTE YA EXISTE
+      notfound.update: CLIENTE NO IDENTIFICADO PARA ACTUALIZAR
+      notfound.delete: CLIENTE NO IDENTIFICADO PARA ELIMINAR
+      customer.delete: CLIENTE ELIMINADO
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 2s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.util.concurrent.TimeoutException
+          - java.io.IOException
+          - java.net.ConnectException
+    instances:
+      customerServiceCircuitBreaker:
+        baseConfig: default
