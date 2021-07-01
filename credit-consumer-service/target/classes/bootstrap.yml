@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: credit-consumer-service
-  cloud:
-    config:
-      uri: http://localhost:8081
-    
