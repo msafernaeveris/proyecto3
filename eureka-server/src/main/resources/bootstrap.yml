@@ -4,4 +4,3 @@ spring:
   cloud:
     config:
       uri: http://localhost:8081
-#      uri: http://192.168.0.106:8081

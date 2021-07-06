@@ -6,6 +6,6 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/arodriguezcu/Proyecto3-everis.git
+          uri: https://github.com/msafernaeveris/config-server3.git
           searchPaths: config-data
           default-label: main
